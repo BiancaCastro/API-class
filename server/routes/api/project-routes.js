@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const router  = express.Router();
 
 // GET route => to get all the projects
-router.get('/projects', (req, res, next) => {
+router.get('/projects', (req, res) => {
   Project.find().populate('tasks')
     .then((allTheProjects) => {
       res.json(allTheProjects);
@@ -15,7 +15,7 @@ router.get('/projects', (req, res, next) => {
     });
 });
 
-router.post('/projects', (req, res, next) => {
+router.post('/projects', (req, res) => {
   Project.create({
     title: req.body.title,
     description: req.body.description,
@@ -29,7 +29,7 @@ router.post('/projects', (req, res, next) => {
     });
 });
 
-router.get('/projects/:id', (req, res, next) => {
+router.get('/projects/:id', (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
