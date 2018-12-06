@@ -7,12 +7,13 @@ import AddProject from './AddProject';
 class ProjectList extends Component {
   constructor(){
       super();
-      this.state = { listOfProjects: [] };
+      this.state = { listOfProjects: null };
   }
 
   getAllProjects = () =>{
     axios.get(`http://localhost:5000/api/projects`)
     .then(responseFromApi => {
+      console.log(responseFromApi);
       this.setState({
         listOfProjects: responseFromApi.data
       })
@@ -24,11 +25,12 @@ class ProjectList extends Component {
   }
 
   render(){
-    return(
-      <div>
+   
+      return this.state.listOfProjects ? 
+        (<div>
         <div style={{width: '60%', float:"left"}}>
           { this.state.listOfProjects.map((project, index) => {
-            return (
+             return (
               <div key={project._id}>
                 <Link to={`/projects/${project._id}`}>
                   <h3>{project.title}</h3>
@@ -36,13 +38,19 @@ class ProjectList extends Component {
                 <p style={{maxWidth: '400px'}} >{project.description} </p>
               </div>
             )})
-          }
+          }    
         </div>
         <div style={{width: '40%', float:"right"}}>
             <AddProject getData={() => this.getAllProjects()}/>
         </div>
-      </div>
-    )
+      </div>)
+      : 
+        (
+        <p>Loading...</p>
+      )
+      
+     
+
   }
 }
 
